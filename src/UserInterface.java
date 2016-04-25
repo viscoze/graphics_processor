@@ -24,11 +24,17 @@ public class UserInterface {
     }
 
     private void initializeUI() {
-        JPanel mainPanel  = new JPanel();
+        JPanel mainPanel  = new JPanel(new BorderLayout(2,1));
         JPanel menuPanel  = new JPanel();
         JPanel graphPanel = new GraphPanel(createRandomScores());
 
-        frame.add(graphPanel);
+        JButton buildButton = new JButton("Build Graph");
+
+        menuPanel.add(buildButton);
+
+        mainPanel.add(graphPanel, BorderLayout.CENTER);
+        mainPanel.add(menuPanel,  BorderLayout.SOUTH);
+        frame.add(mainPanel);
     }
 
     private List<Double> createRandomScores() {
