@@ -26,9 +26,10 @@ public class UserInterface {
     private void initializeUI() {
         JPanel mainPanel  = new JPanel(new BorderLayout(2,1));
         JPanel menuPanel  = new JPanel();
-        JPanel graphPanel = new GraphPanel(createRandomScores());
+        GraphPanel graphPanel = new GraphPanel();
 
         JButton buildButton = new JButton("Build Graph");
+        buildButton.addActionListener(e -> graphPanel.setScores(createRandomScores()));
 
         menuPanel.add(buildButton);
 

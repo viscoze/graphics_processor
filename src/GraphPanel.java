@@ -11,12 +11,15 @@ public class GraphPanel extends JPanel {
     private Color pointColor = new Color(20, 100, 0, 180);
     private Color gridColor = new Color(200, 200, 200, 200);
 
-    public GraphPanel(List<Double> scores) {
+    public void setScores(List<Double> scores) {
         this.scores = scores;
+        invalidate();
+        this.repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
+        if (scores == null) return;
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -24,13 +27,13 @@ public class GraphPanel extends JPanel {
         int padding = 25;
         int labelPadding = 25;
 
-        List<Point> graphPoints = getListOfPoints();
         paintBackground(g2, padding, labelPadding);
 
         paintHatchMarksForYAxis(g2, padding, labelPadding);
         paintHatchMarksForXAxis(g2, padding, labelPadding);
         paintAxis(g2, padding, labelPadding);
 
+        List<Point> graphPoints = getListOfPoints();
         paintGraph(g2, graphPoints);
         paintPoints(g2, graphPoints);
     }
@@ -51,9 +54,9 @@ public class GraphPanel extends JPanel {
         Stroke oldStroke = g2.getStroke();
         g2.setStroke(oldStroke);
         g2.setColor(pointColor);
-        for (int i = 0; i < graphPoints.size(); i++) {
-            int x = graphPoints.get(i).x - pointWidth / 2;
-            int y = graphPoints.get(i).y - pointWidth / 2;
+        for (Point graphPoint : graphPoints) {
+            int x = graphPoint.x - pointWidth / 2;
+            int y = graphPoint.y - pointWidth / 2;
             int ovalW = pointWidth;
             int ovalH = pointWidth;
             g2.fillOval(x, y, ovalW, ovalH);
@@ -70,7 +73,8 @@ public class GraphPanel extends JPanel {
                 g2.setColor(gridColor);
                 g2.drawLine(padding + labelPadding + 1 + pointWidth, y0, getWidth() - padding, y0);
                 g2.setColor(Color.BLACK);
-                String yLabel = ((int) ((getMinScore() + (getMaxScore() - getMinScore()) * ((i * 1.0) / numberYDivisions)) * 100)) / 100.0 + "";
+                String yLabel = ((int) ((getMinScore() + (getMaxScore() - getMinScore()) *
+                                 ((i * 1.0) / numberYDivisions)) * 100)) / 100.0 + "";
                 FontMetrics metrics = g2.getFontMetrics();
                 int labelWidth = metrics.stringWidth(yLabel);
                 g2.drawString(yLabel, x0 - labelWidth - 5, y0 + (metrics.getHeight() / 2) - 3);
@@ -145,14 +149,4 @@ public class GraphPanel extends JPanel {
         }
         return maxScore;
     }
-
-    public void setScores(List<Double> scores) {
-        this.scores = scores;
-        invalidate();
-        this.repaint();
     }
-
-    public List<Double> getScores() {
-        return scores;
-    }
-}
