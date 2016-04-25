@@ -44,7 +44,7 @@ public class UserInterface {
         int maxDataPoints = 40;
         int maxScore = 10;
         for (int i = 0; i < maxDataPoints; i++) {
-            scores.add((double) random.nextDouble() * maxScore);
+            scores.add(random.nextDouble() * maxScore);
         }
 
         return  scores;
